@@ -1,0 +1,115 @@
+package CalcTest;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import static java.lang.String.valueOf;
+
+public class Calc {
+    public static void main(String[] args) throws IOException {
+        System.out.println("Напишите Ваш пример.");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String s = reader.readLine();
+        Main m = new Main();
+        m.calc(s);
+    }
+}
+
+class Main {
+
+    public String calc(String inputString) {
+        String[] str;
+        String d = " ";
+        str = inputString.split(d);
+
+        if (str.length != 3){
+            System.out.println("Исключение");
+            return null;
+        }
+
+        numbers x = new numbers();
+        if(x.check(str[0]) == 0 && x.check(str[2]) == 0){
+            if(x.solution(Integer.parseInt(str[0]), Integer.parseInt(str[2]), str[1])!=101){
+                System.out.println(x.solution(Integer.parseInt(str[0]), Integer.parseInt(str[2]), str[1]));
+            } else {
+                System.out.println("Исключение");
+            }
+            return null;
+        } else if (x.check(str[0]) > 0 && x.check(str[2]) > 0){
+            if (x.solution(x.check(str[0]), x.check(str[2]), str[1])!=101 && x.solution(x.check(str[0]), x.check(str[2]), str[1])>=1) {
+                System.out.print(x.arabicToRoman(x.solution(x.check(str[0]), x.check(str[2]), str[1])));
+            } else {
+                System.out.println("Исключение");
+            }
+            return null;
+        } else {
+            System.out.println("Исключение");
+            return null;
+        }
+    }
+}
+
+class numbers {
+
+    public int check(String arg) {
+        int result = -1;
+        int[] numbers = new int[10];
+        for (int i = 0; i < numbers.length; i++) {
+            numbers[i] = i + 1;
+        }
+        String[] romanNum = new String[]{"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+
+        while (result == -1) {
+            for (int number : numbers) {
+                if (arg.equals(valueOf(number))) {
+                    result = 0;
+                    break;
+                }
+            }
+            if (result == 0) {
+                break;
+            }
+            for (int i = 0; i < romanNum.length; i++) {
+                if (arg.equals(romanNum[i])) {
+                    result = i+1;
+                    break;
+                }
+            }
+            if (result == -1) {
+                break;
+            }
+        }
+        return result;
+    }
+
+    public String arabicToRoman(int arabic) {
+        String romanResult = "";
+        String[] romanUn = new String[]{"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+        String[] romanTen = new String[]{"X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+        String romanHun = "C";
+        if (arabic / 100 == 1) {
+            romanResult = romanHun;
+        }
+        if (arabic % 100 / 10 >= 1) {
+            romanResult = romanResult + romanTen[(arabic % 100 / 10) - 1];
+        }
+        if (arabic % 10 >= 1) {
+            romanResult = romanResult + romanUn[(arabic % 10) - 1];
+        }
+        return romanResult;
+    }
+
+    public int solution(int a, int b, String s){
+        int res;
+        if (s.equals("+")) {
+            res = a + b;
+        } else if (s.equals("-")) {
+            res = a - b;
+        } else if (s.equals("*")) {
+            res = a * b;
+        } else if (s.equals("/")) {
+            res = a / b;
+        } else res = 101;
+        return res;
+    }
+}
